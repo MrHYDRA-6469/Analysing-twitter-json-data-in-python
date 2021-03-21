@@ -39,3 +39,43 @@ hashtags_counts = Counter(hashtags)
 
 # Task 7 Extracting data for retweets.
 
+# retweets =[]
+# for tweet in tweets:
+#     try : 
+#         retweets.append(tweet['retweet_count'], 
+#               tweet['retweeted_status']['favorite_count'],
+#               tweet['retweeted_status']['user']['followers_count'],
+#               tweet['retweeted_status']['user']['screen_name'],
+#               tweet['text']) 
+
+#     except:
+#         pass
+retweets = [
+             (tweet['retweet_count'], 
+              tweet['retweeted_status']['favorite_count'],
+              tweet['retweeted_status']['user']['followers_count'],
+              tweet['retweeted_status']['user']['screen_name'],
+              tweet['text']) 
+            
+            for tweet in tweets 
+                if 'retweeted_status' in tweet
+           ]
+
+
+# Task 8 Creating a table with insights.
+import pandas as pd
+retweet_df = pd.DataFrame(
+    retweets, 
+    columns=['Retweets','Favorites','Followers','ScreenName','Text']).groupby(
+    ['ScreenName','Text','Followers']).sum().sort_values(by=['Followers'], ascending=False)
+
+# Task 9 Extracting languages and plotting their frequency distribution.
+import matplotlib
+import matplotlib.pyplot as plt
+tweets_languages = []
+for tweet in tweets:
+        tweets_languages.append(tweet['lang'])
+
+plt.hist(tweets_languages)
+plt.show()
+
